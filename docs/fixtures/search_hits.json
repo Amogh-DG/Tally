@@ -1,0 +1,26 @@
+[
+  {
+    "kind": "site",
+    "domain": "github.com",
+    "url": null,
+    "title": null,
+    "score": 0.95,
+    "secs": 5400.0
+  },
+  {
+    "kind": "page",
+    "domain": "github.com",
+    "url": "https://github.com/rust-lang/rust",
+    "title": "rust-lang/rust: Empowering everyone to build reliable and efficient software.",
+    "score": 0.88,
+    "secs": 3400.0
+  },
+  {
+    "kind": "page",
+    "domain": "docs.rs",
+    "url": "https://docs.rs/serde",
+    "title": "serde - Rust",
+    "score": 0.82,
+    "secs": 1200.0
+  }
+]

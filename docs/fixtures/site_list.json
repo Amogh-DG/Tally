@@ -1,0 +1,34 @@
+[
+  {
+    "domain": "github.com",
+    "secs": 5400.0,
+    "pages": [
+      {
+        "url": "https://github.com/rust-lang/rust",
+        "title": "rust-lang/rust: Empowering everyone to build reliable and efficient software.",
+        "secs": 3400.0
+      },
+      {
+        "url": "https://github.com/pulls",
+        "title": "Pull requests",
+        "secs": 2000.0
+      }
+    ]
+  },
+  {
+    "domain": "docs.rs",
+    "secs": 1800.0,
+    "pages": [
+      {
+        "url": "https://docs.rs/serde",
+        "title": "serde - Rust",
+        "secs": 1200.0
+      },
+      {
+        "url": "https://docs.rs/chrono",
+        "title": "chrono - Rust",
+        "secs": 600.0
+      }
+    ]
+  }
+]

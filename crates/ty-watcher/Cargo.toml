@@ -1,0 +1,12 @@
+[package]
+name = "ty-watcher"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ty-winwatch = { path = "../ty-winwatch" }
+ty-afk = { path = "../ty-afk" }
+ty-client = { path = "../ty-client" }
+ty-tray = { path = "../ty-tray" }
+ty-settings = { path = "../ty-settings" }
+ty-server = { path = "../ty-server" }

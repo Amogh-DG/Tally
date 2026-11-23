@@ -1,0 +1,7 @@
+{
+  "afk_timeout_secs": 180,
+  "day_start": "00:00",
+  "port": 5600,
+  "extension_origins": [],
+  "data_dir": "%APPDATA%\\Tally\\data"
+}

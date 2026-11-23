@@ -1,0 +1,47 @@
+{
+  "date": "2026-11-23",
+  "active_secs": 28800.0,
+  "timeline": [
+    {
+      "start": "2026-11-23T09:00:00.000Z",
+      "end": "2026-11-23T12:00:00.000Z",
+      "kind": "app",
+      "label": "Visual Studio Code",
+      "app": "code.exe"
+    },
+    {
+      "start": "2026-11-23T12:00:00.000Z",
+      "end": "2026-11-23T14:00:00.000Z",
+      "kind": "site",
+      "label": "github.com",
+      "app": "firefox.exe"
+    },
+    {
+      "start": "2026-11-23T14:00:00.000Z",
+      "end": "2026-11-23T17:00:00.000Z",
+      "kind": "app",
+      "label": "Visual Studio Code",
+      "app": "code.exe"
+    }
+  ],
+  "top_apps": [
+    {
+      "app": "code.exe",
+      "secs": 21600.0
+    },
+    {
+      "app": "firefox.exe",
+      "secs": 7200.0
+    }
+  ],
+  "top_sites": [
+    {
+      "domain": "github.com",
+      "secs": 5400.0
+    },
+    {
+      "domain": "docs.rs",
+      "secs": 1800.0
+    }
+  ]
+}
