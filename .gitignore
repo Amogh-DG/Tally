@@ -2,3 +2,5 @@
 **/node_modules
 **/dist
 Cargo.lock
+progress.md
+PROGRESS.md
