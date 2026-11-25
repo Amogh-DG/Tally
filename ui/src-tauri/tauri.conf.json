@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "tally-ui",
+  "productName": "tidemark-ui",
   "version": "0.1.0",
-  "identifier": "com.tally.app",
+  "identifier": "com.tidemark.app",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:5173",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "Tally",
+        "title": "Tidemark",
         "width": 1000,
         "height": 700
       }

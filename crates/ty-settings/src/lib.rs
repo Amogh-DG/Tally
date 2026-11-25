@@ -23,6 +23,55 @@ impl Default for Settings {
     }
 }
 
+impl Settings {
+    /// Returns `data_dir` with environment variables like `%APPDATA%` expanded.
+    pub fn resolved_data_dir(&self) -> PathBuf {
+        expand_path(&self.data_dir)
+    }
+}
+
+/// Expands `%APPDATA%`, `%LOCALAPPDATA%`, and `%USERPROFILE%` placeholders in a path.
+pub fn expand_path(path: &Path) -> PathBuf {
+    let raw = path.to_string_lossy();
+    let mut expanded = raw.into_owned();
+
+    if expanded.contains("%APPDATA%") {
+        let appdata = default_appdata_dir();
+        expanded = expanded.replace("%APPDATA%", &appdata.to_string_lossy());
+    }
+    if expanded.contains("%LOCALAPPDATA%") {
+        if let Some(val) = std::env::var_os("LOCALAPPDATA") {
+            expanded = expanded.replace("%LOCALAPPDATA%", &val.to_string_lossy());
+        }
+    }
+    if expanded.contains("%USERPROFILE%") {
+        if let Some(val) = std::env::var_os("USERPROFILE") {
+            expanded = expanded.replace("%USERPROFILE%", &val.to_string_lossy());
+        }
+    }
+
+    PathBuf::from(expanded)
+}
+
+fn default_appdata_dir() -> PathBuf {
+    #[cfg(windows)]
+    {
+        if let Some(appdata) = std::env::var_os("APPDATA") {
+            return PathBuf::from(appdata);
+        }
+        if let Some(userprofile) = std::env::var_os("USERPROFILE") {
+            return PathBuf::from(userprofile).join("AppData").join("Roaming");
+        }
+    }
+    #[cfg(not(windows))]
+    {
+        if let Some(home) = std::env::var_os("HOME") {
+            return PathBuf::from(home).join(".config");
+        }
+    }
+    PathBuf::from(".")
+}
+
 /// Returns the default path to the settings file (`%APPDATA%\Tally\settings.json` on Windows).
 pub fn settings_path() -> PathBuf {
     #[cfg(windows)]
@@ -209,5 +258,13 @@ mod tests {
             let parsed: Settings = serde_json::from_str(&content).expect("parse fixture");
             assert_eq!(parsed, Settings::default());
         }
+    }
+
+    #[test]
+    fn test_resolved_data_dir_expands_appdata() {
+        let settings = Settings::default();
+        let resolved = settings.resolved_data_dir();
+        assert!(!resolved.to_string_lossy().contains("%APPDATA%"));
+        assert!(resolved.ends_with(Path::new("Tally").join("data")));
     }
 }

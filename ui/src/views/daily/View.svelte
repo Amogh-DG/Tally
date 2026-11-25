@@ -6,9 +6,9 @@
   import TopCharts from './TopCharts.svelte';
   import RangeChart from './RangeChart.svelte';
   import EmptyState from './EmptyState.svelte';
-  import { loadDayReport, loadRangeHours } from './utils';
+  import { formatDateISO, isMockMode, loadDayReport, loadRangeHours } from './utils';
 
-  let selectedDate = '2026-11-23';
+  let selectedDate = isMockMode() ? '2026-11-23' : formatDateISO(new Date());
   let timeWindow: 'week' | 'month' = 'week';
 
   let dayReport: DayReport | null = null;

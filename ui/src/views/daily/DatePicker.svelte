@@ -4,7 +4,8 @@
     formatDateDisplay,
     formatDuration,
     shiftDate,
-    formatDateISO
+    formatDateISO,
+    isMockMode
   } from './utils';
 
   export let currentDate: string = '';
@@ -14,7 +15,7 @@
     dateChange: string;
   }>();
 
-  const todayStr = '2026-11-23'; // matches fixtures & current date
+  const todayStr = isMockMode() ? '2026-11-23' : formatDateISO(new Date());
 
   function handlePrev() {
     const prev = shiftDate(currentDate, -1);

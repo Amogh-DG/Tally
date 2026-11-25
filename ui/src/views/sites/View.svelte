@@ -26,8 +26,14 @@
   // Expansion tracking
   let expandedDomains = new Set<string>();
 
-  // Date filters
-  const today = new Date().toISOString().slice(0, 10);
+  // Date filters (local YYYY-MM-DD)
+  function localDateISO(d: Date): string {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  }
+  const today = localDateISO(new Date());
   let fromDate = today;
   let toDate = today;
 

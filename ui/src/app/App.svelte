@@ -4,18 +4,26 @@
   import DailyView from '../views/daily/View.svelte';
   import SettingsView from '../views/settings/View.svelte';
   import { isDarkMode } from './theme';
+  import { server_status } from './api';
 
   type Tab = 'daily' | 'sites' | 'settings';
-  let activeTab: Tab = 'sites';
+  let activeTab: Tab = 'daily';
 
   let isMockMode = false;
+  let serverReachable: boolean | null = null;
 
-  onMount(() => {
+  onMount(async () => {
     isMockMode =
       typeof window !== 'undefined' &&
       (import.meta.env.VITE_MOCK === '1' ||
         import.meta.env.VITE_MOCK === 'true' ||
         !(window as any).__TAURI_INTERNALS__);
+    try {
+      const status = await server_status();
+      serverReachable = status.reachable;
+    } catch {
+      serverReachable = false;
+    }
   });
 </script>
 
@@ -29,7 +37,7 @@
         </svg>
       </div>
       <div class="brand-text">
-        <span class="brand-title">Tally</span>
+        <span class="brand-title">Tidemark</span>
         {#if isMockMode}
           <span class="mock-badge" title="Running in fixture mock mode">MOCK</span>
         {/if}
@@ -84,6 +92,12 @@
     </nav>
 
     <div class="sidebar-footer">
+      {#if serverReachable !== null}
+        <div class="theme-indicator" title="Local tm-server connection status">
+          <span style="width:8px;height:8px;border-radius:50%;display:inline-block;background:{serverReachable ? '#107c41' : '#c50f1f'};"></span>
+          <span>{serverReachable ? 'Server connected' : 'Server offline'}</span>
+        </div>
+      {/if}
       <div class="theme-indicator" title="Theme tracks Windows system setting">
         {#if $isDarkMode}
           <svg class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

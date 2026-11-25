@@ -8,7 +8,7 @@ name = "tally_ui"
 path = "src/lib.rs"
 
 [[bin]]
-name = "tally-ui"
+name = "tidemark-ui"
 path = "src/main.rs"
 
 [dependencies]
@@ -24,6 +24,7 @@ ty-types = { path = "../../crates/ty-types" }
 [dev-dependencies]
 tempfile = "3"
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "net", "io-util"] }
+ty-server = { path = "../../crates/ty-server" }
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }

@@ -10,3 +10,23 @@ ty-client = { path = "../ty-client" }
 ty-tray = { path = "../ty-tray" }
 ty-settings = { path = "../ty-settings" }
 ty-server = { path = "../ty-server" }
+ty-types = { path = "../ty-types" }
+ty-merge = { path = "../ty-merge" }
+ty-analytics = { path = "../ty-analytics" }
+
+chrono = { version = "0.4", features = ["serde"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+ureq = { version = "2.12", features = ["json"] }
+gethostname = "1.1"
+
+[target.'cfg(windows)'.dependencies]
+tray-icon = "0.25"
+windows-sys = { version = "0.52", features = [
+    "Win32_Foundation",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_System_Console",
+] }
+
+[dev-dependencies]
+tempfile = "3"

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import { formatDateDisplay } from './utils';
+  import { formatDateDisplay, formatDateISO, isMockMode } from './utils';
 
   export let date: string = '';
 
@@ -8,8 +8,11 @@
     jumpToDate: string;
   }>();
 
+  const mockMode = isMockMode();
+  const targetDate = mockMode ? '2026-11-23' : formatDateISO(new Date());
+
   function handleToday() {
-    dispatch('jumpToDate', '2026-11-23');
+    dispatch('jumpToDate', targetDate);
   }
 </script>
 
@@ -29,7 +32,7 @@
     </p>
     <div class="empty-actions">
       <button class="action-btn" on:click={handleToday}>
-        Jump to Fixture Day (2026-11-23)
+        {mockMode ? 'Jump to Fixture Day (2026-11-23)' : 'Jump to Today'}
       </button>
     </div>
   </div>

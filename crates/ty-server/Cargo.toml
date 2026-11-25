@@ -13,10 +13,16 @@ gethostname = "1.1"
 ty-types = { path = "../ty-types" }
 ty-merge = { path = "../ty-merge" }
 ty-settings = { path = "../ty-settings" }
+ty-store = { path = "../ty-store" }
 
 [dev-dependencies]
 reqwest = { version = "0.12", features = ["json"] }
+tempfile = "3"
 
 [[bin]]
 name = "ty-server"
 path = "src/main.rs"
+
+[[bin]]
+name = "tm-server"
+path = "src/bin/tm-server.rs"

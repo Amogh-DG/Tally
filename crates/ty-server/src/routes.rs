@@ -139,7 +139,7 @@ async fn delete_bucket(
 pub struct EventsQueryParams {
     pub start: Option<String>,
     pub end: Option<String>,
-    pub limit: Option<usize>,
+    pub limit: Option<isize>,
 }
 
 fn parse_rfc3339(s: &str) -> Result<DateTime<Utc>, ()> {
@@ -172,7 +172,13 @@ async fn get_events(
         None => None,
     };
 
-    match state.store_client.get_events(id, start, end, params.limit).await {
+    let limit = match params.limit {
+        Some(n) if n < 0 => None,
+        Some(n) => Some(n as usize),
+        None => None,
+    };
+
+    match state.store_client.get_events(id, start, end, limit).await {
         Ok(events) => Json(events).into_response(),
         Err(e) => store_error_to_response(e),
     }

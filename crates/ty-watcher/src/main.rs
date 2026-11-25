@@ -1,3 +1,3 @@
-fn main() {
-    todo!("ty-watcher main entry point (Phase 2)");
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    ty_watcher::run_main()
 }

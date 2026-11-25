@@ -1,9 +1,10 @@
 /target
 **/node_modules
 **/dist
-Cargo.lock
-PROGRESS.md
 HANDOFF.md
 PLAN.md
 CONTRACTS.md
-README.md
+crates/**/PROGRESS.md
+crates/**/README.md
+ui/**/PROGRESS.md
+ui/**/README.md

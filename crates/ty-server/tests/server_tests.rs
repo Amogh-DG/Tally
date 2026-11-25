@@ -1,14 +1,23 @@
-use std::path::PathBuf;
+use std::sync::atomic::{AtomicUsize, Ordering};
 use chrono::{Duration, Utc};
 use reqwest::StatusCode;
 use serde_json::json;
 use ty_server::{run, ServerConfig};
 use ty_types::{Bucket, Event};
 
+static TEST_DIR_COUNTER: AtomicUsize = AtomicUsize::new(0);
+
 fn spawn_test_server(extension_origins: Vec<String>) -> (ty_server::ServerHandle, String) {
+    let idx = TEST_DIR_COUNTER.fetch_add(1, Ordering::Relaxed);
+    let data_dir = std::env::temp_dir().join(format!(
+        "ty_server_test_{}_{}",
+        std::process::id(),
+        idx
+    ));
+    let _ = std::fs::remove_dir_all(&data_dir);
     let config = ServerConfig {
         port: 0, // OS assigns an ephemeral port on 127.0.0.1
-        data_dir: PathBuf::from("target/test_data"),
+        data_dir,
         extension_origins,
     };
     let handle = run(config);

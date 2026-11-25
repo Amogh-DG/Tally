@@ -3,6 +3,7 @@
   import {
     get_settings,
     set_settings,
+    export_json,
     type Settings
   } from '../../app/api';
 
@@ -22,6 +23,34 @@
 
   // Validation errors
   let validationErrors: { afk?: string; dayStart?: string } = {};
+
+  // JSON Export state
+  function localDateISO(d: Date): string {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  }
+  let exportFrom = localDateISO(new Date());
+  let exportTo = localDateISO(new Date());
+  let exportPath = `tidemark-export-${exportTo}.json`;
+  let exporting = false;
+  let exportResultMsg: string | null = null;
+  let exportErrorMsg: string | null = null;
+
+  async function handleExport() {
+    exporting = true;
+    exportResultMsg = null;
+    exportErrorMsg = null;
+    try {
+      const written = await export_json(exportFrom, exportTo, exportPath.trim());
+      exportResultMsg = `Exported JSON to ${written}`;
+    } catch (err: any) {
+      exportErrorMsg = err?.message || String(err) || 'Export failed';
+    } finally {
+      exporting = false;
+    }
+  }
 
   onMount(() => {
     loadSettings();
@@ -383,6 +412,58 @@
               {extensionOrigins.length > 0 ? extensionOrigins.join(', ') : 'None configured'}
             </span>
           </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Data Export -->
+      <section class="card-section">
+        <div class="card-header">
+          <div class="section-badge">3</div>
+          <div class="header-text">
+            <h2 class="card-title">Export JSON</h2>
+            <p class="card-description">
+              Export recorded events and computed analytics for a date range to a JSON file.
+            </p>
+          </div>
+        </div>
+
+        <div class="info-grid">
+          <div class="field-group">
+            <label for="export-from" class="field-label">From</label>
+            <input id="export-from" type="date" class="text-input" bind:value={exportFrom} />
+          </div>
+          <div class="field-group">
+            <label for="export-to" class="field-label">To</label>
+            <input id="export-to" type="date" class="text-input" bind:value={exportTo} />
+          </div>
+          <div class="field-group">
+            <label for="export-path" class="field-label">Output File Path</label>
+            <input
+              id="export-path"
+              type="text"
+              class="text-input"
+              style="width: 100%; padding-right: 0.75rem;"
+              bind:value={exportPath}
+            />
+          </div>
+        </div>
+
+        {#if exportResultMsg}
+          <div class="banner success" role="status">{exportResultMsg}</div>
+        {/if}
+        {#if exportErrorMsg}
+          <div class="banner error" role="alert">{exportErrorMsg}</div>
+        {/if}
+
+        <div>
+          <button
+            type="button"
+            class="action-btn secondary"
+            on:click={handleExport}
+            disabled={exporting || !exportPath.trim()}
+          >
+            {exporting ? 'Exporting...' : 'Export JSON'}
+          </button>
         </div>
       </section>
 

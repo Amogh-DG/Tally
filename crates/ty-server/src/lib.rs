@@ -66,7 +66,21 @@ impl Drop for ServerHandle {
 }
 
 pub fn run(config: ServerConfig) -> ServerHandle {
-    run_with_store(config, Box::new(InMemoryStore::new()))
+    let data_dir = ty_settings::expand_path(&config.data_dir);
+    std::fs::create_dir_all(&data_dir).unwrap_or_else(|e| {
+        panic!("failed to create data_dir {}: {e}", data_dir.display());
+    });
+    let db_path = data_dir.join("tally.db");
+    let store = ty_store::SqliteStore::open(&db_path).unwrap_or_else(|e| {
+        panic!("failed to open sqlite store at {}: {e}", db_path.display());
+    });
+    run_with_store(
+        ServerConfig {
+            data_dir,
+            ..config
+        },
+        Box::new(store),
+    )
 }
 
 pub fn run_with_store(config: ServerConfig, store: Box<dyn Store>) -> ServerHandle {

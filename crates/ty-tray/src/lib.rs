@@ -304,35 +304,38 @@ pub fn is_autostart_enabled_in(
     }
 }
 
-/// Returns the expected path to `tally-ui.exe` (or `tally-ui` on Unix) located next to the running executable.
+/// Returns the expected path to `tidemark-ui.exe` (or `tidemark-ui` on Unix) located next to the running executable.
 pub fn ui_path() -> Result<PathBuf, Box<dyn std::error::Error + Send + Sync>> {
     let current_exe = std::env::current_exe()?;
     let exe_dir = current_exe
         .parent()
         .ok_or("cannot find parent directory of current executable")?;
     #[cfg(windows)]
-    let ui_filename = "tally-ui.exe";
+    let ui_filename = "tidemark-ui.exe";
     #[cfg(not(windows))]
-    let ui_filename = "tally-ui";
+    let ui_filename = "tidemark-ui";
 
     Ok(exe_dir.join(ui_filename))
 }
 
-/// Launches `tally-ui.exe` located next to the running executable.
+/// Launches `tidemark-ui.exe` (falling back to `tally-ui.exe`) located next to the running executable.
 ///
 /// NOTE: Windows-specific logic is UNTESTED until executed on Windows.
 pub fn open_ui() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-    let path = ui_path()?;
-    #[cfg(windows)]
-    {
-        std::process::Command::new(path).spawn()?;
-        Ok(())
+    let mut path = ui_path()?;
+    if !path.exists() {
+        if let Some(dir) = path.parent() {
+            #[cfg(windows)]
+            let fallback = dir.join("tally-ui.exe");
+            #[cfg(not(windows))]
+            let fallback = dir.join("tally-ui");
+            if fallback.exists() {
+                path = fallback;
+            }
+        }
     }
-    #[cfg(not(windows))]
-    {
-        std::process::Command::new(path).spawn()?;
-        Ok(())
-    }
+    std::process::Command::new(path).spawn()?;
+    Ok(())
 }
 
 #[cfg(test)]
@@ -428,9 +431,9 @@ mod tests {
         let current_exe = std::env::current_exe().expect("current exe");
         assert_eq!(path.parent(), current_exe.parent());
         #[cfg(windows)]
-        assert_eq!(path.file_name().unwrap(), "tally-ui.exe");
+        assert_eq!(path.file_name().unwrap(), "tidemark-ui.exe");
         #[cfg(not(windows))]
-        assert_eq!(path.file_name().unwrap(), "tally-ui");
+        assert_eq!(path.file_name().unwrap(), "tidemark-ui");
     }
 
     #[cfg(windows)]

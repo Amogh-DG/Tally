@@ -64,37 +64,50 @@ export function formatDateISO(d: Date): string {
 }
 
 /**
- * Parse an ISO timestamp to seconds from midnight (0 to 86400).
+ * Parse an ISO timestamp to seconds from local midnight (0 to 86400).
+ * In mock mode, fixtures use UTC timestamps directly as display times.
  */
 export function parseSecondsInDay(isoString: string, reportDate: string): number {
   if (!isoString) return 0;
-  const match = isoString.match(/^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2}):(\d{2})/);
-  if (match) {
-    const [, datePart, h, m, s] = match;
-    if (datePart === reportDate) {
-      return parseInt(h, 10) * 3600 + parseInt(m, 10) * 60 + parseInt(s, 10);
+  if (isMockMode()) {
+    const match = isoString.match(/^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2}):(\d{2})/);
+    if (match) {
+      const [, datePart, h, m, s] = match;
+      if (datePart === reportDate) {
+        return parseInt(h, 10) * 3600 + parseInt(m, 10) * 60 + parseInt(s, 10);
+      }
     }
+    const d = new Date(isoString);
+    const dayStart = new Date(reportDate + 'T00:00:00Z');
+    const diff = (d.getTime() - dayStart.getTime()) / 1000;
+    return Math.max(0, Math.min(86400, diff));
   }
 
-  // Fallback to UTC difference against reportDate midnight UTC
   const d = new Date(isoString);
-  const dayStart = new Date(reportDate + 'T00:00:00Z');
-  const diff = (d.getTime() - dayStart.getTime()) / 1000;
+  const [y, mo, da] = reportDate.split('-').map(Number);
+  const localMidnight = new Date(y, mo - 1, da, 0, 0, 0, 0);
+  const diff = (d.getTime() - localMidnight.getTime()) / 1000;
   return Math.max(0, Math.min(86400, diff));
 }
 
 /**
- * Format the time portion of an ISO timestamp as HH:MM.
+ * Format the time portion of an ISO timestamp as HH:MM (local time in live mode).
  */
 export function formatTimeOfDay(isoString: string): string {
   if (!isoString) return '';
-  const match = isoString.match(/T(\d{2}:\d{2})/);
-  if (match) {
-    return match[1];
+  if (isMockMode()) {
+    const match = isoString.match(/T(\d{2}:\d{2})/);
+    if (match) {
+      return match[1];
+    }
+    const d = new Date(isoString);
+    const h = String(d.getUTCHours()).padStart(2, '0');
+    const m = String(d.getUTCMinutes()).padStart(2, '0');
+    return `${h}:${m}`;
   }
   const d = new Date(isoString);
-  const h = String(d.getUTCHours()).padStart(2, '0');
-  const m = String(d.getUTCMinutes()).padStart(2, '0');
+  const h = String(d.getHours()).padStart(2, '0');
+  const m = String(d.getMinutes()).padStart(2, '0');
   return `${h}:${m}`;
 }
 
