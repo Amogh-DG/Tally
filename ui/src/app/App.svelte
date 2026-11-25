@@ -37,7 +37,7 @@
         </svg>
       </div>
       <div class="brand-text">
-        <span class="brand-title">Tidemark</span>
+        <span class="brand-title">Tally</span>
         {#if isMockMode}
           <span class="mock-badge" title="Running in fixture mock mode">MOCK</span>
         {/if}

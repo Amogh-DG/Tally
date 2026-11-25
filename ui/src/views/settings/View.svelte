@@ -33,7 +33,7 @@
   }
   let exportFrom = localDateISO(new Date());
   let exportTo = localDateISO(new Date());
-  let exportPath = `tidemark-export-${exportTo}.json`;
+  let exportPath = `tally-export-${exportTo}.json`;
   let exporting = false;
   let exportResultMsg: string | null = null;
   let exportErrorMsg: string | null = null;

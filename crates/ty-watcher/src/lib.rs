@@ -27,7 +27,7 @@ use ty_server::{run as run_server, ServerConfig, ServerHandle};
 ///
 /// NOTE: Windows sensing and tray logic are UNTESTED until executed on Windows.
 pub fn run_main() -> Result<(), Box<dyn std::error::Error>> {
-    eprintln!("Starting Tidemark watcher...");
+    eprintln!("Starting Tally watcher...");
 
     // 1. Enable autostart on first run
     if let Err(e) = enable_autostart_on_first_run() {
