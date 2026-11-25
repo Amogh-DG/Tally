@@ -93,7 +93,7 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
-    background: var(--card-bg, #ffffff);
+    background: var(--bg-card, var(--card-bg, #ffffff));
     border: 1px solid var(--border-color, #e0e0e0);
     border-radius: 8px;
     padding: 0.85rem 1.25rem;
@@ -110,9 +110,9 @@
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    background: var(--sidebar-bg, #f4f4f5);
+    background: var(--bg-card-subtle, var(--sidebar-bg, #f4f4f5));
     border: 1px solid var(--border-color, #e4e4e7);
-    color: var(--text-color, #1a1a1a);
+    color: var(--text-primary, var(--text-color, #1a1a1a));
     padding: 0.4rem 0.75rem;
     border-radius: 6px;
     font-size: 0.85rem;
@@ -122,7 +122,7 @@
   }
 
   .nav-btn:hover {
-    background: var(--active-btn-bg, #e5e5e5);
+    background: var(--item-active-bg, var(--active-btn-bg, #e5e5e5));
     border-color: var(--border-color, #d4d4d8);
   }
 
@@ -148,7 +148,7 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.4rem 0.85rem;
-    background: var(--sidebar-bg, #f4f4f5);
+    background: var(--bg-card-subtle, var(--sidebar-bg, #f4f4f5));
     border: 1px solid var(--border-color, #e4e4e7);
     border-radius: 6px;
     cursor: pointer;
@@ -156,13 +156,13 @@
   }
 
   .date-display-wrapper:hover .date-label {
-    background: var(--active-btn-bg, #e5e5e5);
+    background: var(--item-active-bg, var(--active-btn-bg, #e5e5e5));
   }
 
   .date-text {
     font-weight: 600;
     font-size: 0.95rem;
-    color: var(--text-color, #1a1a1a);
+    color: var(--text-primary, var(--text-color, #1a1a1a));
   }
 
   .today-badge {
@@ -198,22 +198,26 @@
   }
 
   .summary-label {
-    color: var(--text-muted, #71717a);
+    color: var(--text-secondary, var(--text-muted, #71717a));
   }
 
   .summary-value {
     font-weight: 700;
     font-size: 1.1rem;
-    color: var(--text-muted, #71717a);
+    color: var(--text-secondary, var(--text-muted, #71717a));
   }
 
   .summary-value.has-activity {
-    color: #2563eb;
+    color: var(--accent, #2563eb);
+  }
+
+  :global(.dark) .summary-value.has-activity {
+    color: var(--accent, #60a5fa);
   }
 
   @media (prefers-color-scheme: dark) {
     .summary-value.has-activity {
-      color: #60a5fa;
+      color: var(--accent, #60a5fa);
     }
   }
 </style>

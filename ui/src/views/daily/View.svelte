@@ -130,10 +130,10 @@
 
 <style>
   :global(:root) {
-    --card-bg: #ffffff;
-    --border-color: #e5e7eb;
-    --text-color: #111827;
-    --text-muted: #6b7280;
+    --card-bg: var(--bg-card, #ffffff);
+    --border-color: var(--border-color, #e5e7eb);
+    --text-color: var(--text-primary, #111827);
+    --text-muted: var(--text-muted, #6b7280);
     --timeline-bg: #f8fafc;
     --tooltip-bg: #18181b;
     --tooltip-text: #ffffff;
@@ -143,16 +143,28 @@
 
   @media (prefers-color-scheme: dark) {
     :global(:root) {
-      --card-bg: #242427;
-      --border-color: #38383c;
-      --text-color: #f3f4f6;
-      --text-muted: #9ca3af;
+      --card-bg: var(--bg-card, #2c2c2c);
+      --border-color: var(--border-color, #38383c);
+      --text-color: var(--text-primary, #f3f4f6);
+      --text-muted: var(--text-muted, #9ca3af);
       --timeline-bg: #1e1e21;
       --tooltip-bg: #111113;
       --tooltip-text: #ffffff;
       --empty-bg: #1c1c1f;
       --item-row-bg: rgba(255, 255, 255, 0.04);
     }
+  }
+
+  :global(.dark) {
+    --card-bg: var(--bg-card, #2c2c2c);
+    --border-color: var(--border-color, #38383c);
+    --text-color: var(--text-primary, #f3f4f6);
+    --text-muted: var(--text-muted, #9ca3af);
+    --timeline-bg: #1e1e21;
+    --tooltip-bg: #111113;
+    --tooltip-text: #ffffff;
+    --empty-bg: #1c1c1f;
+    --item-row-bg: rgba(255, 255, 255, 0.04);
   }
 
   .daily-view-container {
