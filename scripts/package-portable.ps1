@@ -23,13 +23,16 @@ try {
     try {
         npm run build
         if ($LASTEXITCODE -ne 0) { throw "Frontend build failed with exit code $LASTEXITCODE" }
+        Write-Host "[2/4] Building release tidemark-ui binary with embedded frontend..."
+        npx @tauri-apps/cli build --no-bundle
+        if ($LASTEXITCODE -ne 0) { throw "Tauri build failed with exit code $LASTEXITCODE" }
     }
     finally {
         Pop-Location
     }
 
-    Write-Host "[2/4] Building release Rust binaries (tm-watcher, tm-server, tidemark-ui)..."
-    cargo build --release --workspace --bin tm-watcher --bin tm-server --bin tidemark-ui
+    Write-Host "[3/4] Building release Rust binaries (tm-watcher, tm-server)..."
+    cargo build --release --bin tm-watcher --bin tm-server
     if ($LASTEXITCODE -ne 0) { throw "Cargo release build failed with exit code $LASTEXITCODE" }
 
     $TargetRelease = Join-Path $RepoRoot "target\release"
@@ -40,10 +43,9 @@ try {
     }
 
     Write-Host "[3/4] Assembling portable folder at $ResolvedOut ..."
-    if (Test-Path $ResolvedOut) {
-        Remove-Item -Recurse -Force $ResolvedOut
+    if (-not (Test-Path $ResolvedOut)) {
+        New-Item -ItemType Directory -Path $ResolvedOut -Force | Out-Null
     }
-    New-Item -ItemType Directory -Path $ResolvedOut -Force | Out-Null
 
     $Binaries = @("tm-watcher.exe", "tm-server.exe", "tidemark-ui.exe")
     foreach ($Bin in $Binaries) {
