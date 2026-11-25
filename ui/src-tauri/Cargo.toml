@@ -3,12 +3,27 @@ name = "tally-ui"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+name = "tally_ui"
+path = "src/lib.rs"
+
+[[bin]]
+name = "tally-ui"
+path = "src/main.rs"
+
 [dependencies]
+chrono = { version = "0.4", features = ["serde"] }
+reqwest = { version = "0.12", features = ["json"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tauri = { version = "2", features = [] }
 ty-analytics = { path = "../../crates/ty-analytics" }
 ty-settings = { path = "../../crates/ty-settings" }
+ty-types = { path = "../../crates/ty-types" }
+
+[dev-dependencies]
+tempfile = "3"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "net", "io-util"] }
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
